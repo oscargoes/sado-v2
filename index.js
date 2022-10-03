@@ -22,5 +22,14 @@ client.on('messageCreate', message => {
         })
     }
 })
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isChatInputCommand()) return;
+
+	const { commandName } = interaction;
+
+	if (commandName === 'ping') {
+		await interaction.reply('Pong!');
+    }
+});
 
 client.login(process.env.TOKEN)
