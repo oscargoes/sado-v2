@@ -43,11 +43,10 @@ client.on('messageCreate', message => {
 // Slash commands
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;
-
+    // Fetch command called
     const command = interaction.client.commands.get(interaction.commandName);
-
 	if (!command) return;
-
+    // If no error, execute command
 	try {
 		await command.execute(interaction);
 	} catch (error) {
@@ -56,4 +55,5 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
+// Client login
 client.login(process.env.TOKEN)
