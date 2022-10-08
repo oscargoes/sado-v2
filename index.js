@@ -26,34 +26,28 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-// Turn client on
-client.on('ready', () => {
-    console.log('sado is ready')
-})
+// Gather available events and initialize them
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
+}
 
 // Non-slash commands (temporary)
-client.on('messageCreate', message => {
-    if (message.content === 'ping') {
-        message.reply({
-            content: 'pong',
-        })
-    }
-})
-
-// Slash commands
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isChatInputCommand()) return;
-    // Fetch command called
-    const command = interaction.client.commands.get(interaction.commandName);
-	if (!command) return;
-    // If no error, execute command
-	try {
-		await command.execute(interaction);
-	} catch (error) {
-		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-	}
-});
+// client.on('messageCreate', message => {
+//     if (message.content === 'ping') {
+//         message.reply({
+//             content: 'pong',
+//         })
+//     }
+// })
 
 // Client login
 client.login(process.env.TOKEN)
