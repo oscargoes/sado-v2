@@ -6,8 +6,10 @@ module.exports = {
 		.setName('kick' + member)
 		.setDescription('Kicks a person'),
 	async execute(interaction) {
-        if(!message.member.roles.find("name", "Admin"))
+        if(!message.member.roles.find("name", "Admin")){
+            message.channel.send("You are not able to kick!");
             return;
+        }
         member.kick().then((member) => {
             // Successmessage
             message.channel.send(":wave: " + member.displayName + " has been successfully kicked :point_right: ");
