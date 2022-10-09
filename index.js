@@ -1,7 +1,7 @@
 // Imports
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, GatewayIntentBits, Collection } = require('discord.js')
+const { Client, GatewayIntentBits, Collection, Partials } = require('discord.js')
 require('dotenv/config')
 
 // Client set-up
@@ -12,7 +12,12 @@ const client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMessageReactions,
-    ]
+    ],
+	// partials: [
+	// 	Partials.Channel,
+	// 	Partials.Message,
+	// 	Partials.MessageContent,
+	// ]
 })
 
 // Gather available commands within a collection map
