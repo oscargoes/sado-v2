@@ -1,11 +1,12 @@
 const { SlashCommandBuilder } = require('discord.js');
-var member = message.mentions.members.first();
+
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('timeout' + member)
+		.setName('timeout')
 		.setDescription('Puts member in timeout'),
 	async execute(interaction) {
+        /* var member = interaction.mentions.members.first();
         if(!message.member.roles.find("name", "Admin")){
             message.channel.send("You are not able to timeout!");
             return;
@@ -16,6 +17,6 @@ module.exports = {
         }).catch(() => {
             // Failmessage
             message.channel.send("Access Denied");
-        });
-	},
+        }); */
+	}
 };

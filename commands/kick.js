@@ -1,21 +1,34 @@
-const { SlashCommandBuilder } = require('discord.js');
-var member = message.mentions.members.first();
+const { SlashCommandBuilder, PermissionFlagsBits, GuildMember } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('kick' + member)
-		.setDescription('Kicks a person'),
+		.setName('kick')
+		.setDescription('Kicks a person')
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .addUserOption( option =>
+            option.setName('user')
+            .setDescription('User to kick')
+            .setRequired(true))
+        .addStringOption( option =>
+            option.setName('reason')
+            .setDescription('Reason for kick')
+            .setRequired(true)),
 	async execute(interaction) {
-        if(!message.member.roles.find("name", "Admin")){
-            message.channel.send("You are not able to kick!");
-            return;
+        const target = interaction.options.getMember('user');
+        const reason = interaction.options.getString('reason');
+        if (!target.kickable) {
+            await interaction.reply({
+                content: 'You are unable to kick that person',
+                ephemeral: true
+            });
         }
-        member.kick().then((member) => {
-            // Successmessage
-            message.channel.send(":wave: " + member.displayName + " has been successfully kicked :point_right: ");
-        }).catch(() => {
-            // Failmessage
-            message.channel.send("Access Denied");
+        target.send(reason);
+        target.kick(reason);
+
+        await interaction.reply({
+            content: `You successfully kicked <@${target.id}>`,
+            ephemeral: true
         });
-	},
+	}
 };
