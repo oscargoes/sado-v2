@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, PermissionFlagsBits, GuildMember } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const wait = require('node:timers/promises').setTimeout;
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -22,11 +23,22 @@ module.exports = {
                 content: 'You are unable to kick that person',
                 ephemeral: true
             });
+            return;
         }
-        target.send(reason);
-        target.kick(reason);
 
         await interaction.reply({
+            content: `LMAO <@${target.id}> is getting kicked from Unswallowed Committee in 10 seconds.\nReason: ${reason}`
+        });
+
+        await wait(10000);
+
+        await interaction.followUp({
+            content: `Adios <@${target.id}>`
+        });
+        
+        target.kick(reason);
+
+        await interaction.followUp({
             content: `You successfully kicked <@${target.id}>`,
             ephemeral: true
         });

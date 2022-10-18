@@ -1,22 +1,44 @@
-const { SlashCommandBuilder } = require('discord.js');
-
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('timeout')
-		.setDescription('Puts member in timeout'),
+		.setDescription('Puts member in timeout')
+        .setDMPermission(false)
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .addUserOption( option =>
+            option.setName('user')
+            .setDescription('User to timeout')
+            .setRequired(true))
+        .addIntegerOption( option =>
+            option.setName('time')
+            .setDescription("Duration of timeout in minutes")
+            .setRequired(true))
+        .addStringOption( option =>
+            option.setName('reason')
+            .setDescription('Reason for timeout')
+            .setRequired(true)),
 	async execute(interaction) {
-        /* var member = interaction.mentions.members.first();
-        if(!message.member.roles.find("name", "Admin")){
-            message.channel.send("You are not able to timeout!");
+        const target = interaction.options.getMember('user');
+        const time = interaction.options.getInteger('time');
+        const reason = interaction.options.getString('reason');
+        if (!target.manageable) {
+            await interaction.reply({
+                content: 'You are unable to timeout that person',
+                ephemeral: true
+            });
             return;
         }
-        member.timeout().then((member) => {
-            // Successmessage
-            message.channel.send("LMAOO " + member.displayName + " is in timeout");
-        }).catch(() => {
-            // Failmessage
-            message.channel.send("Access Denied");
-        }); */
+        
+        await interaction.reply({
+            content: `LMAO <@${target.id}> is in timeout for ${time} minute(s).\nReason: ${reason}`
+        });
+        
+        target.timeout(time * 60000, reason);
+
+        await interaction.folowUp({
+            content: `You successfully put <@${target.id}> in timeout`,
+            ephemeral: true
+        });
 	}
 };
