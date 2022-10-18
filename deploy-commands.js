@@ -1,7 +1,7 @@
 // Imports
 const fs = require('node:fs');
 const path = require('node:path');
-const { REST, SlashCommandBuilder, Routes } = require('discord.js');
+const { REST, Routes } = require('discord.js');
 require('dotenv/config')
 
 // Array of commands to register

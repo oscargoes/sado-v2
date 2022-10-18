@@ -1,6 +1,7 @@
 // Imports
 const fs = require("node:fs");
 const path = require("node:path");
+
 const {
   Client,
   GatewayIntentBits,
@@ -8,6 +9,7 @@ const {
   Partials,
 } = require("discord.js");
 require("dotenv/config");
+
 
 // Client set-up
 const client = new Client({
