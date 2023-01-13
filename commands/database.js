@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("database")
-    .setDescription("Returns server info from bot database")
+    .setDescription("Registers server data into database")
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   async execute(interaction) {
     let guildProfile = await Guild.findOne({ guildID: interaction.guild.id });

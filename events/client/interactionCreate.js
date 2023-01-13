@@ -1,9 +1,10 @@
-const { GuildMember } = require("discord.js");
+//const { GuildMember } = require("discord.js");
 
-// Slash command interaction handler
+// Interaction handler
 module.exports = {
   name: "interactionCreate",
   async execute(interaction) {
+    // Select menu interactions handler
     if (interaction.isSelectMenu()) {
       const customID = interaction.customId;
       const values = interaction.values;
@@ -30,19 +31,23 @@ module.exports = {
       }
     }
 
-    if (!interaction.isChatInputCommand()) return;
-    // Fetch command called
-    const command = interaction.client.commands.get(interaction.commandName);
-    if (!command) return;
-    // If no error, execute command
-    try {
-      await command.execute(interaction);
-    } catch (error) {
-      console.error(error);
-      await interaction.reply({
-        content: "There was an error while executing this command!",
-        ephemeral: true,
-      });
-    }
+    // Slash command handler
+    if (interaction.isChatInputCommand()){
+      // Fetch command called
+      const command = interaction.client.commands.get(interaction.commandName);
+      if (!command) return;
+      // If no error, execute command
+      try {
+        await command.execute(interaction);
+      } catch (error) {
+        console.error(error);
+        await interaction.reply({
+          content: "There was an error while executing this command!",
+          ephemeral: true,
+        });
+      }
+    } 
+    
+    return;
   },
 };
