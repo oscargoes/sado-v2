@@ -18,6 +18,8 @@ module.exports = {
                 userId: message.author.id,
                 xp: 0,
                 level: 1,
+                valUser: "N/A",
+                valTag: "N/A",
             });
 
             await userProfile.save().catch(console.error);
